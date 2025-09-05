@@ -1,4 +1,4 @@
-// Contenido corregido para js/ui.js
+// Contenido corregido y simplificado para js/ui.js
 
 import * as DOM from './dom.js';
 import * as CONST from './constants.js';
@@ -33,7 +33,7 @@ export function toggleTheme() {
     applyTheme();
 }
 
-// --- Tool & Selection Mode Switching ---
+// --- Tool Switching ---
 export function setToolUI(tool) {
     const isRips = tool === 'rips';
     DOM.toolRips.classList.toggle('hidden', !isRips);
@@ -46,14 +46,11 @@ export function setToolUI(tool) {
     updateButtonsState();
 }
 
-export function setSelectionModeUI(mode) {
-    const isFolder = mode === 'folder';
-    DOM.selectionModeIndicator.textContent = isFolder ? 'CARPETA' : 'ARCHIVO';
-    DOM.switchSelectionModeBtn.innerHTML = `<i class="fas fa-sync-alt"></i> Cambiar a ${isFolder ? 'archivo' : 'carpeta'}`;
-    DOM.dropZone.querySelector('.drop-title').textContent = `Arrastra y suelta ${isFolder ? 'una carpeta' : 'archivos'} aquí`;
-    DOM.dropZone.querySelector('.drop-subtitle').textContent = `o haz clic para seleccionar ${isFolder ? 'una carpeta' : 'archivos'}`;
+// --- Drop Zone UI ---
+export function resetDropZoneUI() {
     DOM.dropZone.querySelector('i').className = 'fas fa-cloud-upload-alt';
-    DOM.selectBtn.innerHTML = `<i class="fas ${isFolder ? 'fa-folder' : 'fa-file'}"></i> Seleccionar ${isFolder ? 'carpeta' : 'archivos'}`;
+    DOM.dropZone.querySelector('.drop-title').textContent = 'Arrastra y suelta una carpeta aquí';
+    DOM.dropZone.querySelector('.drop-subtitle').textContent = 'o haz clic para seleccionar una carpeta';
 }
 
 export function updateDropZoneUI(message, icon = 'fa-folder-open') {
@@ -97,23 +94,17 @@ export function renderFileChangesList(element, countEl, data) {
 }
 
 // --- Populate Selects ---
-function populateSelect(selectEl, options, displayKeyAsText = false) {
+export function populateSelect(selectEl, options, displayKeyAsText = false) {
     selectEl.innerHTML = '';
     for (const key in options) {
         const option = document.createElement('option');
-
-        // El 'value' (lo que se usa para renombrar) SIEMPRE será la clave/abreviatura (ej: "PED", "EPI")
         option.value = key;
-
-        // El texto visible será la clave ("EPI") o la descripción ("PED (Pediatría)") según se necesite
         option.textContent = displayKeyAsText ? key : options[key];
-
-        // El tooltip al pasar el mouse siempre mostrará la descripción completa
         option.title = options[key];
-
         selectEl.appendChild(option);
     }
 }
+
 export function populateAllSelects() {
     populateSelect(DOM.prefixSelect, CONST.RIPS_PREFIX_OPTIONS, true);
     populateSelect(DOM.tipoDocumentoInput, CONST.DOC_TYPE_OPTIONS.reduce((acc, curr) => ({...acc, [curr]: curr }), {}));

@@ -1,4 +1,4 @@
-// Contenido corregido para js/main.js
+// Contenido corregido y simplificado para js/main.js
 
 import * as DOM from './dom.js';
 import * as UI from './ui.js';
@@ -11,24 +11,16 @@ function setupEventListeners() {
     // Header
     DOM.themeToggleBtn.addEventListener('click', UI.toggleTheme);
     DOM.helpToggleBtn.addEventListener('click', () => UI.openModal('help-modal'));
-
-    // ▼▼▼ MODAL VERSION APARTE ▼▼▼
-    // Ahora el enlace de versión abre su propio modal "version-modal"
     DOM.querySelector('#version-link').addEventListener('click', (e) => {
-        e.preventDefault(); // Evita que la página salte
+        e.preventDefault();
         UI.openModal('version-modal');
     });
-
     DOM.toggleRipsBtn.addEventListener('click', () => switchTool('rips'));
     DOM.toggleRemoverBtn.addEventListener('click', () => switchTool('remover'));
 
     // File Selection
-    DOM.selectBtn.addEventListener('click', () => {
-        state.selectionMode === 'folder' ? FileHandler.selectFolder() : DOM.fileInput.click();
-    });
+    DOM.selectBtn.addEventListener('click', FileHandler.selectFolder);
     DOM.folderInput.addEventListener('change', (e) => FileHandler.handleFiles(e.target.files));
-    DOM.fileInput.addEventListener('change', (e) => FileHandler.handleFiles(e.target.files));
-    DOM.switchSelectionModeBtn.addEventListener('click', switchSelectionMode);
     
     // Drop Zone
     ['dragover', 'dragenter'].forEach(event => DOM.dropZone.addEventListener(event, (e) => {
@@ -87,22 +79,16 @@ function setupEventListeners() {
 }
 
 // --- Core Functions ---
-
 function switchTool(tool) {
     state.currentTool = tool;
     UI.setToolUI(tool);
     UI.updateButtonsState();
 }
 
-function switchSelectionMode() {
-    state.selectionMode = state.selectionMode === 'folder' ? 'file' : 'folder';
-    clearSelection();
-}
-
 function clearSelection() {
     resetSelection();
     UI.setSelectedCount(0);
-    UI.setSelectionModeUI(state.selectionMode);
+    UI.resetDropZoneUI();
     UI.setStatus('esperando');
     UI.setProgress(0);
     UI.updateButtonsState();
@@ -115,7 +101,7 @@ async function handleDrop(e) {
     if (handle?.kind === 'directory') {
         await FileHandler.handleDirectory(handle);
     } else {
-        FileHandler.handleFiles(e.dataTransfer.files);
+        UI.logMessage('Por favor, arrastra una carpeta.', 'error');
     }
 }
 
@@ -196,7 +182,6 @@ async function revertLastOperation() {
 }
 
 // --- Initialization ---
-
 function initializeApp() {
     UI.applyTheme();
     UI.populateAllSelects();
@@ -210,10 +195,9 @@ function initializeApp() {
 
     loadLastRenameMap();
     UI.loadRemoverSettings();
-    UI.setSelectionModeUI(state.selectionMode);
     setupEventListeners();
     UI.updateButtonsState();
-    UI.logMessage('Interfaz lista. Bienvenido a la versión 3.2.', 'info');
+    UI.logMessage('Interfaz lista. Bienvenido a la versión 3.3 (Simplificada).', 'info');
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);
