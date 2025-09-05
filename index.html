@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramienta de Renombrado de Archivos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" id="app">
+        <header>
+            <div class="header-title">
+                <h1>Renombrador de Soportes RIPS</h1>
+                <p class="lead" id="main-subtitle">Configura los datos y revisa una vista previa antes de aplicar los cambios.</p>
+            </div>
+            <div class="controls">
+                <div class="toggle-switch" role="tablist" aria-label="Seleccionar herramienta">
+                    <button id="toggle-rips" class="active" role="tab" aria-selected="true">
+                        <i class="fas fa-file-medical"></i> RIPS
+                    </button>
+                    <button id="toggle-remover" role="tab" aria-selected="false">
+                        <i class="fas fa-exchange-alt"></i> Modificar
+                    </button>
+                </div>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="help-toggle" class="help-toggle" aria-label="Mostrar ayuda">
+                    <i class="fas fa-question"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-cog"></i>
+                <span id="config-title">Paso 1: Configurar Datos</span>
+            </div>
+            
+            <div id="tool-rips">
+                <div class="grid" role="form">
+                    <div>
+                        <label for="nit-input"><i class="fas fa-id-card"></i> NIT (sin dígito de verificación)</label>
+                        <input id="nit-input" class="input" type="text" inputmode="numeric" placeholder="Ej: 891600091" />
+                        <div class="description">Solo números. Se guarda automáticamente.</div>
+                    </div>
+                    <div>
+                        <label for="codigo-input"><i class="fas fa-barcode"></i> Número de Factura</label>
+                        <input id="codigo-input" class="input" type="text" placeholder="Ej: IPS12345" />
+                    </div>
+                    <div>
+                        <label for="prefix-select"><i class="fas fa-tag"></i> Tipo de Soporte</label>
+                        <select id="prefix-select" class="input"></select>
+                        <p id="prefix-desc" class="description">Selecciona un tipo de soporte.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tool-remover" class="hidden">
+                 <div class="grid" role="form">
+                    <div>
+                        <label class="checkbox-inline"><input id="enable-doctype-checkbox" type="checkbox" /> Tipo de Documento</label>
+                        <select id="tipo-documento-input" class="input" disabled></select>
+                    </div>
+                    <div>
+                        <label class="checkbox-inline"><input id="enable-ext-quitar-checkbox" type="checkbox" /> Extensión a quitar</label>
+                        <select id="extQuitar" class="input" disabled></select>
+                    </div>
+                    <div>
+                        <label class="checkbox-inline"><input id="enable-fecha-checkbox" type="checkbox" /> Fecha (Mes) a Poner</label>
+                        <input id="fecha-input" class="input" type="month" disabled />
+                    </div>
+                    <div>
+                        <label class="checkbox-inline"><input id="enable-profesional-checkbox" type="checkbox" /> Tipo de Profesional</label>
+                        <select id="tipo-profesional-input" class="input" disabled></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-folder-open"></i>
+                <span>Paso 2: Seleccionar Archivos o Carpeta</span>
+            </div>
+            
+            <div class="selection-mode">
+                <div class="mode-indicator" id="selection-mode-indicator">CARPETA</div>
+                <span>Modo de selección:</span>
+                <button id="switch-selection-mode" class="btn" style="margin-left: auto; padding: 5px 10px; font-size: 13px;">
+                    <i class="fas fa-sync-alt"></i> Cambiar a archivo
+                </button>
+            </div>
+
+            <div id="drop-zone" class="drop-area" role="region" aria-label="Área de selección">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="drop-title">Arrastra y suelta una carpeta aquí</div>
+                <div class="drop-subtitle">o haz clic para seleccionar una carpeta</div>
+                <input id="folder-input" type="file" webkitdirectory directory multiple class="file-input" />
+                <input id="file-input" type="file" accept=".pdf" multiple class="file-input" />
+            </div>
+
+            <div class="action-buttons">
+                <button id="select-btn" class="btn btn-primary"><i class="fas fa-folder"></i> Seleccionar carpeta</button>
+                <button id="preview-btn" class="btn" disabled><i class="fas fa-search"></i> Vista previa</button>
+                <button id="confirm-rename-btn" class="btn btn-secondary" disabled><i class="fas fa-rocket"></i> Renombrar</button>
+                <button id="revert-btn" class="btn btn-danger" disabled><i class="fas fa-undo"></i> Revertir Último Lote</button>
+                <button id="clear-btn" class="btn btn-light" disabled><i class="fas fa-times-circle"></i> Limpiar Selección</button>
+            </div>
+
+            <div class="stats">
+                <div><span class="badge" id="stat-count">0 archivos</span> seleccionados</div>
+                <div class="status" id="stat-status">Estado: esperando</div>
+            </div>
+
+            <div class="progress-wrap">
+                <div class="progress"><div class="progress-bar" role="progressbar"></div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-info-circle"></i>
+                <span>Registro de Actividad</span>
+            </div>
+            <div id="log-container" class="log-container" aria-live="polite"></div>
+        </div>
+
+        <footer>
+            © 2025 Desarrollado por <a href="https://chococreativo.com.co/proyectos" target="_blank" rel="noopener">Chocó Creativo 🖤</a> - 
+            <a href="#" id="version-link">Versión 3.2</a> · 
+          </footer>
+    </div>
+
+    <div id="preview-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-list-alt"></i> Vista Previa de Cambios</h3>
+                <button class="close-btn" data-modal-close="preview-modal">×</button>
+            </div>
+            <div class="modal-content">
+                <p>Se van a modificar <strong id="preview-count">0</strong> archivos. Revisa los cambios antes de continuar.</p>
+                <div class="file-list" id="preview-list"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" data-modal-close="preview-modal">Cerrar</button>
+                <button id="apply-from-preview-btn" class="btn btn-secondary"><i class="fas fa-check"></i> Aplicar Cambios</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-rocket"></i> Confirmar Cambios</h3>
+                <button class="close-btn" data-modal-close="confirm-modal">×</button>
+            </div>
+            <div class="modal-content">
+                <p>Se van a renombrar <strong id="confirm-count">0</strong> archivos. Esta acción modificará los archivos en tu disco.</p>
+                <div class="file-list" id="confirm-list"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" data-modal-close="confirm-modal">Cancelar</button>
+                <button id="apply-confirm" class="btn btn-secondary">Aplicar cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="success-animation">
+                <div class="checkmark">✓</div>
+                <div>
+                    <h3 class="modal-title" id="success-title">Proceso completado</h3>
+                    <p id="success-msg">Se renombraron X archivos correctamente.</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" data-modal-close="success-modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="help-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-life-ring"></i> Ayuda y Soporte</h3>
+                <button class="close-btn" data-modal-close="help-modal">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="tutorial-tabs">
+                    <div class="tutorial-tab active" data-tab="tutorial">
+                        <i class="fas fa-graduation-cap"></i> ¿Cómo funciona?
+                    </div>
+                    <div class="tutorial-tab" data-tab="support">
+                        <i class="fas fa-paper-plane"></i> Soporte y Sugerencias
+                    </div>
+                </div>
+                <div class="tutorial-content active" id="tutorial-content">
+                    </div>
+                <div class="tutorial-content" id="support-content">
+                    <h4>¿Encontraste un error o tienes una idea?</h4>
+                    <p>Tu opinión es muy valiosa para mejorar esta herramienta. Si encuentras un comportamiento inesperado o tienes una sugerencia para una nueva función, no dudes en comunicárnoslo.</p>
+                    <p>La mejor manera de hacerlo es enviando un correo electrónico. Hemos preparado un enlace que pre-rellena la información necesaria para que nos sea más fácil ayudarte.</p>
+                    <br>
+                    <a href="mailto:agente.chococreativo@gmail.com?subject=Sugerencia/Error en Renombrador RIPS v3.2&body=Hola, tengo una sugerencia/reporte de error:%0A%0A**Describe tu idea o el problema:**%0A%0A**Pasos para reproducir el error (si aplica):**%0A1. ...%0A2. ...%0A%0A¡Gracias!" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> Enviar Correo de Soporte
+                    </a>
+                    <div class="description" style="margin-top: 15px;">
+                        Esto abrirá tu cliente de correo electrónico por defecto (Gmail, Outlook, etc.) con los campos de destinatario y asunto ya completados.
+                    </div>
+                </div>
+            </div>
+             <div class="modal-actions">
+                <button class="btn btn-primary" data-modal-close="help-modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+	<div id="version-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-star"></i> Novedades de la Versión 3.2</h3>
+                <button class="close-btn" data-modal-close="version-modal">×</button>
+            </div>
+            <div class="modal-content">
+                <p>Esta versión incluye una reestructuración completa del código para mayor estabilidad y nuevas funciones de usabilidad.</p>
+                <h4>Novedades Principales</h4>
+                <ul>
+                    <li><strong>Código Modular:</strong> El proyecto ahora está separado en archivos HTML, CSS y JavaScript modulares, lo que lo hace más rápido y fácil de mantener.</li>
+                    <li><strong>Función de Revertir Mejorada:</strong> Ahora puedes deshacer el último lote de archivos renombrados de forma segura desde la propia aplicación.</li>
+                    <li><strong>Sección de Ayuda y Soporte:</strong> Se centralizó toda la ayuda en un nuevo modal interactivo.</li>
+                    <li><strong>Mejoras de Interfaz:</strong> La vista previa ya no es una ventana emergente y se añadió un botón para limpiar la selección de archivos.</li>
+                    <li><strong>Corrección de Errores:</strong> Se solucionó el bucle infinito ("Maximum call stack") y se mejoró la lógica de los menús desplegables.</li>
+                </ul>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" data-modal-close="version-modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+
+</body>
+</html>
