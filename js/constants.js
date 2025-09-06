@@ -18,11 +18,12 @@ export const EXT_TO_REMOVE_OPTIONS = [
 export const HELP_TUTORIAL_CONTENT = `
     <h4>Herramienta: Renombrador RIPS</h4>
     <div class="step"><div class="step-number">1</div><div class="step-content"><div class="step-title">Configura los datos RIPS</div><p>Ingresa el NIT (sin dígito de verificación), el número de factura y selecciona el tipo de soporte.</p><div class="step-example">Ej: NIT: 891600091, Factura: IPS12345, Tipo: HEV</div></div></div>
-    <div class="step"><div class="step-number">2</div><div class="step-content"><div class="step-title">Selecciona los archivos</div><p>Arrastra o selecciona la carpeta (o los archivos PDF individuales) que deseas renombrar.</p></div></div>
+    <div class="step"><div class="step-number">2</div><div class="step-content"><div class="step-title">Selecciona los archivos</div><p>Arrastra o selecciona la carpeta (que contengan los archivos PDF) que deseas renombrar.</p></div></div>
     <div class="step"><div class="step-number">3</div><div class="step-content"><div class="step-title">Previsualiza y Renombra</div><p>Usa "Vista previa" para revisar los cambios en un modal. Si todo es correcto, haz clic en "Renombrar".</p><div class="step-example">"informe.pdf" → "HEV_891600091_IPS12345_informe.pdf"</div></div></div>
     <hr>
-    <h4>Herramienta: Modificador de Extensiones</h4>
+    <h4>Herramienta: Modificador de Extensiones (Adapatada a solicitud especial)</h4>
     <div class="step"><div class="step-number">1</div><div class="step-content"><div class="step-title">Configura las modificaciones</div><p>Habilita y configura las opciones que deseas aplicar: quitar extensiones, agregar fecha, tipo de documento, etc.</p><div class="step-example">Ej: Quitar "_ADULTEZ.pdf", agregar prefijo "CC"</div></div></div>
-    <div class="step"><div class="step-number">2</div><div class="step-content"><div class="step-title">Selecciona los archivos</div><p>Elige los archivos PDF a modificar, ya sea por carpeta o individualmente.</p></div></div>
+    <div class="step"><div class="step-number">2</div><div class="step-content"><div class="step-title">Selecciona los archivos</div><p>Elige los archivos PDF a modificar, por carpeta.</p></div></div>
     <div class="step"><div class="step-number">3</div><div class="step-content"><div class="step-title">Previsualiza y Renombra</div><p>Verifica los nuevos nombres en la vista previa y aplica los cambios con el botón "Renombrar".</p><div class="step-example">"12345_ADULTEZ.pdf" → "CC12345.pdf"</div></div></div>
+
 `;
