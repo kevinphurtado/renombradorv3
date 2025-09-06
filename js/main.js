@@ -101,14 +101,14 @@ async function handleDrop(e) {
     if (handle?.kind === 'directory') {
         await FileHandler.handleDirectory(handle);
     } else {
-        UI.logMessage('Por favor, arrastra una carpeta.', 'error');
+        UI.logMessage('Solo se pueden arrastrar carpetas a esta área. Por favor, intenta de nuevo con una carpeta en lugar de archivos.', 'error');
     }
 }
 
 function showPreview() {
     const data = FileHandler.generatePreviewData();
     if (data.length === 0) {
-        alert('No hay cambios para previsualizar. Ningún archivo coincide con las reglas de modificación.');
+        alert('No se encontraron archivos que necesiten ser renombrados según la configuración actual. Verifica que los archivos correctos están seleccionados y que las reglas de renombrado son las adecuadas.');
         return;
     }
     UI.renderFileChangesList(DOM.previewList, DOM.previewCount, data);
@@ -118,7 +118,7 @@ function showPreview() {
 function showConfirm() {
     const data = FileHandler.generatePreviewData();
     if (data.length === 0) {
-        alert('No hay cambios para aplicar.');
+        alert('No hay cambios pendientes para aplicar. Asegúrate de haber generado una vista previa con cambios antes de confirmar.');
         return;
     }
     UI.renderFileChangesList(DOM.confirmList, DOM.confirmCount, data);
@@ -141,7 +141,7 @@ async function runRenameProcess() {
 
 async function revertLastOperation() {
     if (state.lastRenameMap.length === 0) {
-        alert('No hay ninguna operación reciente para revertir.');
+        alert('No hay ninguna operación de renombrado reciente que se pueda revertir. El historial de cambios está vacío.');
         return;
     }
     
@@ -152,7 +152,7 @@ async function revertLastOperation() {
     UI.logMessage(`Iniciando reversión de ${state.lastRenameMap.length} archivos...`, 'info');
     
     if (!state.directoryHandle) {
-        alert('Por favor, selecciona de nuevo la carpeta donde se realizó la operación para poder revertir los cambios.');
+        alert('Para poder revertir los cambios, por favor selecciona la misma carpeta en la que realizaste la última operación de renombrado.');
         await FileHandler.selectFolder();
         if (!state.directoryHandle) return; // User cancelled
     }
