@@ -8,7 +8,7 @@ export async function selectFolder() {
         const handle = await window.showDirectoryPicker();
         await handleDirectory(handle);
     } catch (err) {
-        if (err.name !== 'AbortError') UI.logMessage('Error al seleccionar carpeta: ' + err.message, 'error');
+        if (err.name !== 'AbortError') UI.logMessage('Ocurrió un error al intentar seleccionar la carpeta. Por favor, asegúrate de tener los permisos necesarios y vuelve a intentarlo. Detalles: ' + err.message, 'error');
     }
 }
 
@@ -22,7 +22,7 @@ export async function handleDirectory(handle) {
         UI.logMessage(`Carpeta "${handle.name}" seleccionada y con permisos.`, 'success');
         await collectEntries();
     } catch (err) {
-        UI.logMessage('Error al acceder a la carpeta: ' + err.message, 'error');
+        UI.logMessage('No se pudo acceder a la carpeta. Es posible que no tengas los permisos de lectura y escritura necesarios. Detalles: ' + err.message, 'error');
         resetSelection();
     } finally {
         UI.updateButtonsState();
@@ -108,7 +108,7 @@ export function generatePreviewData() {
 // --- Core Processing Task ---
 async function renameFile(entry, newName) {
     if (!state.directoryHandle) {
-        UI.logMessage('Error: El renombrado real solo es posible en modo carpeta.', 'error');
+        UI.logMessage('El renombrado de archivos solo está disponible cuando se selecciona una carpeta completa, no con archivos individuales.', 'error');
         return false;
     }
     try {
@@ -121,7 +121,7 @@ async function renameFile(entry, newName) {
         UI.logMessage(`'${entry.name}' → '${newName}'`, 'success');
         return true;
     } catch (err) {
-        UI.logMessage(`Error al procesar '${entry.name}': ${err.message}`, 'error');
+        UI.logMessage(`No se pudo procesar el archivo '${entry.name}'. Es posible que el archivo esté en uso o protegido contra escritura. Detalles: ${err.message}`, 'error');
         return false;
     }
 }
