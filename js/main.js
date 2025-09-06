@@ -135,7 +135,7 @@ async function runRenameProcess() {
         tasks, 
         'Proceso Completado', 
         'Se modificaron {s} de {t} archivo(s).',
-        true // Save map for revert
+        true 
     );
 }
 

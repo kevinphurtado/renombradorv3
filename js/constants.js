@@ -8,11 +8,11 @@ export const RIPS_PREFIX_OPTIONS = {
     "PDE": "Evidencia del envío del trámite respectivo"
 };
 
-export const DOC_TYPE_OPTIONS = ["", "CC", "RC", "TI", "CN"];
-export const PROFESSIONAL_TYPE_OPTIONS = {"": "Ninguno", "MED": "MED (Médico)", "ENF": "ENF (Enfermera)", "PED": "PED (Pediatría)"};
+export const DOC_TYPE_OPTIONS = ["CC", "RC", "TI", "CN", "TI"];
+export const PROFESSIONAL_TYPE_OPTIONS = {"MED": "MED (Médico)", "ENF": "ENF (Enfermera)", "PED": "PED (Pediatría)"};
 export const EXT_TO_REMOVE_OPTIONS = [
     "_ADULTEZ.pdf", "_VEJEZ.pdf", "_JV.pdf", "_F.pdf", "_ESC.pdf", "_TB.pdf", "_PRE.pdf", "_CT.pdf", 
-    "_MM.pdf", "_PSA.pdf", "_EXM.pdf", " EMX.pdf", "_PARTO.pdf", "_CESAREA.pdf", "_PARTO FALTA EPICRISIS.pdf"
+    "_MM.pdf", "_PSA.pdf", "_EXM.pdf", "_PARTO.pdf", "_CESAREA.pdf", "_PARTO FALTA EPICRISIS.pdf"
 ];
 
 export const HELP_TUTORIAL_CONTENT = `

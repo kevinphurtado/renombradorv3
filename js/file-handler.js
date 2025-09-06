@@ -57,7 +57,7 @@ export async function collectEntries() {
     UI.setSelectedCount(state.entriesList.length);
 }
 
-// --- Renaming Logic ---
+
 function buildNewNameForRips(origName) {
     const ripPrefix = `${DOM.prefixSelect.value}_${DOM.nitInput.value}_${DOM.codigoInput.value}_`;
     return origName.startsWith(ripPrefix) ? null : `${ripPrefix}${origName}`;
@@ -148,8 +148,8 @@ export async function processTasks(tasks, successTitle, successMsgTemplate, save
     if (saveMap && tasks.length > 0) {
         const renameMap = tasks.map(t => ({ original: t.original, nuevo: t.newName }));
         saveLastRenameMap(renameMap);
-    } else if (saveMap === false) { // This means it's a revert operation
-        saveLastRenameMap([]); // Clear the map after reverting
+    } else if (saveMap === false) { 
+        saveLastRenameMap([]); 
     }
 
     await collectEntries();
